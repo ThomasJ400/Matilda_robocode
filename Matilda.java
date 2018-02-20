@@ -57,7 +57,9 @@ public class Matilda extends RateControlRobot {
 			count++;
 			if (count % 10 == 0) {
 				trRobotName = null;
-			}	
+				movement();	//Sets off movement every 10 turns.
+			}
+			
   		}
 	}	
 	/**
@@ -129,6 +131,20 @@ public class Matilda extends RateControlRobot {
 		gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));
 		
 	}
+	
+	public void movement()
+	{
+	//all encapsulated into the one method, small movements so that it doesn't take so long completing it, top to bottom.
+			double heading = getHeading();//since this was originally junior, which had a heading variable constantly set, we can set it with 
+			int movementArc = 50; //movementArc is the movement of each straight line, keeping it short will keep throw trackers off.
+			turnRight(30);
+			ahead(20 + movementArc);
+			turnRight(40);
+			ahead(30 + movementArc);
+			turnLeft(20);
+			back(40 + movementArc);		
+	}
+
 	/**
 	 * Do the worm!!!!
 	 */
