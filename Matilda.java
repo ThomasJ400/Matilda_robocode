@@ -16,7 +16,7 @@ import robocode.RateControlRobot;
 import robocode.Robot;
 import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
-import static robocode.util.Utils.normalRelativeAngleDegrees;
+import robocode.util.Utils.normalRelativeAngleDegrees;
 import robocode.util.*;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
- * @contributor James (Defence)
+ * @contributor James (Defense)
  * @contributor Thomas (Movement code)
  */
 public class Matilda extends Robot {
@@ -60,14 +60,16 @@ public class Matilda extends Robot {
 			count++;
 			if (count % 10 == 0) {
 				trRobotName = null;
-			}	
+				movement();	//Sets off movement every 10 turns.
+			}
+			
   		}
 	}	
 	/**
 	 * onScannedRobot:  triggers on any time the radar catches an enemy robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Priority Queue - Targetting, Wall Evasion, Target Reacquisition
+		// Design comment - Priority Queue - Targetting, Wall Evasion, Target Reacquisition
 		double bulletPower = Math.min(3.0,getEnergy());
 
 		
@@ -178,6 +180,20 @@ public class Matilda extends Robot {
 	}
 		
 	}
+	
+	public void movement()
+	{
+	//all encapsulated into the one method, small movements so that it doesn't take so long completing it, top to bottom.
+			double heading = getHeading();//since this was originally junior, which had a heading variable constantly set, we can set it with 
+			int movementArc = 50; //movementArc is the movement of each straight line, keeping it short will keep throw trackers off.
+			turnRight(30);
+			ahead(20 + movementArc);
+			turnRight(40);
+			ahead(30 + movementArc);
+			turnLeft(20);
+			back(40 + movementArc);		
+	}
+
 	/**
 	 * Do the worm!!!!
 	 */
