@@ -1,4 +1,5 @@
 
+
 /**
  * Copyright (c) 2001-2017 Mathew A. Nelson and Robocode contributors
  * All rights reserved. This program and the accompanying materials
@@ -28,6 +29,7 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
+ * @contributor James (Defence)
  * 
  */
 public class Matilda extends RateControlRobot {
