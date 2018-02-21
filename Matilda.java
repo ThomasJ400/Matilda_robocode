@@ -28,6 +28,7 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
+ * @contributor James (Defense)
  * @contributor Thomas (Movement code)
  */
 public class Matilda extends Robot {
@@ -66,7 +67,7 @@ public class Matilda extends Robot {
 	 * onScannedRobot:  triggers on any time the radar catches an enemy robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Priority Queue - Targetting, Wall Evasion, Target Reacquisition
+		// Design comment - Priority Queue - Targetting, Wall Evasion, Target Reacquisition
 		double bulletPower = Math.min(3.0,getEnergy());
 		double myX = getX();
 		double myY = getY();
