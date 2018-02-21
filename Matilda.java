@@ -28,9 +28,9 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
- * 
+ * @contributor Thomas (Movement code)
  */
-public class Matilda extends RateControlRobot {
+public class Matilda extends Robot {
 	int count = 0; // Keeps track of turn count
 	double gunTurnAmt; // gun Turn value
 	String trRobotName; // the Name of the Robot currently tracking
