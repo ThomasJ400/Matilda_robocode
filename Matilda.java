@@ -66,6 +66,9 @@ public class Matilda extends RateControlRobot {
 	public void onScannedRobot(ScannedRobotEvent e) {
 		// Priority Queue - Targetting, Wall Evasion, Target Reacquisition
 		double bulletPower = Math.min(3.0,getEnergy());
+
+		
+		
 		double myX = getX();
 		double myY = getY();
 		double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
@@ -127,6 +130,49 @@ public class Matilda extends RateControlRobot {
 		// Set the target
 		trRobotName = e.getName();
 		gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));
+		
+		
+		
+		
+        // fire and safe zone defence
+        public void onScannedRobot(ScannedRobotEvent e) {
+			if (HitByBulletEvent && Energy <40)
+			{
+				ahead(100);
+				predictedX += Math.sin(enemyHeading) * enemyVelocity;
+			    predictedY += Math.cos(enemyHeading) * enemyVelocity;
+			    fire(1);
+			    ahead(400,400);
+
+				}
+
+		}
+
+
+		//LAST STAND  AND ENEMY MOVEMENT INTERSEPTION!!!
+		public double HitByBulletEvent (HitByBulletEvent e) {
+
+		if(Energy<25)
+		{
+
+		turn(45+ enemyHeading() + getHeading() - e.getBearing()+30);
+		fire(1);
+		ahead(30);
+		turnRight(45);
+
+		turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
+	     fire(3);
+	     ahead(50);
+		 turnLeft(45);
+
+	     turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
+	     fire(1);
+	     back(30);
+		 turnRight(45);
+	     }
+
+
+	}
 		
 	}
 	/**
