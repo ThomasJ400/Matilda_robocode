@@ -1,6 +1,4 @@
 
-
-
 /**
  * Copyright (c) 2001-2017 Mathew A. Nelson and Robocode contributors
  * All rights reserved. This program and the accompanying materials
@@ -12,11 +10,11 @@ package sample;
 
 
 import robocode.HitRobotEvent;
-import robocode.RateControlRobot;
+
 import robocode.Robot;
 import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
-import robocode.util.Utils.normalRelativeAngleDegrees;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 import robocode.util.*;
 
 import java.awt.*;
@@ -30,7 +28,6 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
- * @contributor James (Defense)
  * @contributor Thomas (Movement code)
  */
 public class Matilda extends Robot {
@@ -69,27 +66,24 @@ public class Matilda extends Robot {
 	 * onScannedRobot:  triggers on any time the radar catches an enemy robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Design comment - Priority Queue - Targetting, Wall Evasion, Target Reacquisition
+		// Priority Queue - Targetting, Wall Evasion, Target Reacquisition
 		double bulletPower = Math.min(3.0,getEnergy());
-
-		
-		
 		double myX = getX();
 		double myY = getY();
-		double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
+		double absoluteBearing = dTR(getHeading()) + e.getBearingRadians();
 		double enemyX = getX() + e.getDistance() * Math.sin(absoluteBearing);
 		double enemyY = getY() + e.getDistance() * Math.cos(absoluteBearing);
 		double enemyHeading = e.getHeadingRadians();
 		double enemyVelocity = e.getVelocity();
-		double gunTurnAmt = 360; // Set gun Turn one whole rotation
-			double previousEnergy = 100;
+	//	double gunTurnAmt = 360; // Set gun Turn one whole rotation
+		//	double previousEnergy = 100;
 		
 			//The Enemy has fired a bullet
 		
 		
 		if (e.isSentryRobot() == true){
-		setTurnRadarRight(999);
-		setTurnGunRight(999);
+	//	turnRadarRight(999);
+		//turnGunRight(999);
 		}
 		else{
 	
@@ -118,8 +112,11 @@ public class Matilda extends Robot {
 					double theta = Utils.normalAbsoluteAngle(Math.atan2(
 						predictedX - getX(), predictedY - getY()));
 
-					setTurnRadarRightRadians(Utils.normalRelativeAngle(absoluteBearing - getRadarHeadingRadians()));
-					setTurnGunRightRadians(Utils.normalRelativeAngle(theta - getGunHeadingRadians()));
+//				setTurnRadarRightRadians(Utils.normalRelativeAngle(absoluteBearing - e.getRadarHeadingRadians()));
+//				setTurnGunRightRadians(Utils.normalRelativeAngle(theta - getGunHeadingRadians()));
+				
+				turnRadarRight(rTD(Utils.normalRelativeAngle(absoluteBearing - dTR(getRadarHeading()) ) ));
+				turnGunRight(rTD(Utils.normalRelativeAngle(theta - dTR(getGunHeading()) )));	
 					fire(bulletPower);
 			}
 		}
@@ -136,55 +133,12 @@ public class Matilda extends Robot {
 		trRobotName = e.getName();
 		gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));
 		
-		
-		
-		
-        // fire and safe zone defence
-        public void onScannedRobot(ScannedRobotEvent e) {
-			if (HitByBulletEvent && Energy <40)
-			{
-				ahead(100);
-				predictedX += Math.sin(enemyHeading) * enemyVelocity;
-			    predictedY += Math.cos(enemyHeading) * enemyVelocity;
-			    fire(1);
-			    ahead(400,400);
-
-				}
-
-		}
-
-
-		//LAST STAND  AND ENEMY MOVEMENT INTERSEPTION!!!
-		public double HitByBulletEvent (HitByBulletEvent e) {
-
-		if(Energy<25)
-		{
-
-		turn(45+ enemyHeading() + getHeading() - e.getBearing()+30);
-		fire(1);
-		ahead(30);
-		turnRight(45);
-
-		turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
-	     fire(3);
-	     ahead(50);
-		 turnLeft(45);
-
-	     turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
-	     fire(1);
-	     back(30);
-		 turnRight(45);
-	     }
-
-
-	}
-		
 	}
 	
 	public void movement()
 	{
 	//all encapsulated into the one method, small movements so that it doesn't take so long completing it, top to bottom.
-			double heading = getHeading();//since this was originally junior, which had a heading variable constantly set, we can set it with 
+		//	double heading = getHeading();//since this was originally junior, which had a heading variable constantly set, we can set it with 
 			int movementArc = 50; //movementArc is the movement of each straight line, keeping it short will keep throw trackers off.
 			turnRight(30);
 			ahead(20 + movementArc);
@@ -193,6 +147,23 @@ public class Matilda extends Robot {
 			turnLeft(20);
 			back(40 + movementArc);		
 	}
+
+
+//Degrees to radians
+public double dTR(double deg)
+{
+	double rads = Math.toRadians(deg);
+	return rads;
+}
+
+//Radians to degrees
+public double rTD(double rads)
+{
+	double deg = Math.toDegrees(rads);
+	return deg;
+}
+
+
 
 	/**
 	 * Do the worm!!!!
