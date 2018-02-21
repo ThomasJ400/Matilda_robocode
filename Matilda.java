@@ -1,4 +1,6 @@
 
+
+
 /**
  * Copyright (c) 2001-2017 Mathew A. Nelson and Robocode contributors
  * All rights reserved. This program and the accompanying materials
@@ -14,7 +16,7 @@ import robocode.RateControlRobot;
 import robocode.Robot;
 import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
-import static robocode.util.Utils.normalRelativeAngleDegrees;
+import robocode.util.Utils.normalRelativeAngleDegrees;
 import robocode.util.*;
 
 import java.awt.*;
@@ -28,9 +30,10 @@ import java.awt.geom.*;
  * Lock on to nearest robot, dodge and shoot.
  *
  * @author Neal (original)
- * 
+ * @contributor James (Defense)
+ * @contributor Thomas (Movement code)
  */
-public class Matilda extends RateControlRobot {
+public class Matilda extends Robot {
 	int count = 0; // Keeps track of turn count
 	double gunTurnAmt; // gun Turn value
 	String trRobotName; // the Name of the Robot currently tracking
@@ -66,8 +69,11 @@ public class Matilda extends RateControlRobot {
 	 * onScannedRobot:  triggers on any time the radar catches an enemy robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// Priority Queue - Targetting, Wall Evasion, Target Reacquisition
+		// Design comment - Priority Queue - Targetting, Wall Evasion, Target Reacquisition
 		double bulletPower = Math.min(3.0,getEnergy());
+
+		
+		
 		double myX = getX();
 		double myY = getY();
 		double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
@@ -129,6 +135,49 @@ public class Matilda extends RateControlRobot {
 		// Set the target
 		trRobotName = e.getName();
 		gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));
+		
+		
+		
+		
+        // fire and safe zone defence
+        public void onScannedRobot(ScannedRobotEvent e) {
+			if (HitByBulletEvent && Energy <40)
+			{
+				ahead(100);
+				predictedX += Math.sin(enemyHeading) * enemyVelocity;
+			    predictedY += Math.cos(enemyHeading) * enemyVelocity;
+			    fire(1);
+			    ahead(400,400);
+
+				}
+
+		}
+
+
+		//LAST STAND  AND ENEMY MOVEMENT INTERSEPTION!!!
+		public double HitByBulletEvent (HitByBulletEvent e) {
+
+		if(Energy<25)
+		{
+
+		turn(45+ enemyHeading() + getHeading() - e.getBearing()+30);
+		fire(1);
+		ahead(30);
+		turnRight(45);
+
+		turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
+	     fire(3);
+	     ahead(50);
+		 turnLeft(45);
+
+	     turnRight(45+enemyHeading() + getHeading() - e.getBearing()+30);
+	     fire(1);
+	     back(30);
+		 turnRight(45);
+	     }
+
+
+	}
 		
 	}
 	
